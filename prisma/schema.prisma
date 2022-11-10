@@ -6,12 +6,28 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Producto {
+  id          Int       @id @default(autoincrement())
+  nombre      String    @unique
+  slug        String
+  descripcion String
+  existencia  Int
+  precio      Decimal
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Carrrito    Carrito[]
+}
+
+model Carrito {
+  id          Int       @id @default(autoincrement())
+  producto    Producto  @relation(fields: [productoId], references: [id])
+  productoId  Int       @unique
+  cantidad    Int
+  precioTotal Decimal
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
