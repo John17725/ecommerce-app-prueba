@@ -25,3 +25,23 @@ Also checkout these awesome tutorials on `create-t3-app`.
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://beta.create.t3.gg/en/deployment/vercel) and [Docker](https://beta.create.t3.gg/en/deployment/docker) for more information.
+
+
+# Configuracion de entorno
+
+- PostgreSQL v15 (En contenedor docker)
+- node@v18.10.0
+- npm@8.19.2
+
+
+### Levantamiento de contenedor docker para bd
+
+Descargar la imagen de la version mas reciente de postgresql para docker
+```bash
+docker pull postgres 
+```
+Posterior a la descarga levantamos un contenedor con postgres
+
+```bash
+docker run -e POSTGRES_USER=usuario -e POSTGRES_PASSWORD=password -e POSTGRES_DB=mitiendita -p 5432:5432 -d postgres
+```
