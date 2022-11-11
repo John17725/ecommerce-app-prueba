@@ -45,3 +45,9 @@ Posterior a la descarga levantamos un contenedor con postgres
 ```bash
 docker run -e POSTGRES_USER=usuario -e POSTGRES_PASSWORD=password -e POSTGRES_DB=mitiendita -p 5432:5432 -d postgres
 ```
+## Pasos para lanzar el proyecto
+```
+~$ yarn install
+~$ yarn dev
+~$ npx prisma migrate dev
+```
