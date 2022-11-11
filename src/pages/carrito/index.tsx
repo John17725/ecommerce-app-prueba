@@ -8,21 +8,25 @@ const index = () => {
         {
             id: 1,
             nombre: 'alcatel',
+            cantidad: 4,
             precio: .13,
         },
         {
             id: 2,
             nombre: 'nokia',
+            cantidad: 4,
             precio: .90,
         },
         {
             id: 3,
             nombre: 'samsung',
+            cantidad: 4,
             precio: .56,
         },
         {
             id: 4,
             nombre: 'xiaomi',
+            cantidad: 4,
             precio: .50,
         },
     ]
@@ -51,10 +55,16 @@ const index = () => {
                             className='max-md flex mt-3 mb-3'
                         >
                             <p className='flex justify-end ml-4'>
+                                {producto.id}
+                            </p>
+                            <p className='flex justify-end ml-4'>
+                                Cantidad: {producto.cantidad}
+                            </p>
+                            <p className='flex justify-end ml-4'>
                                 {producto.nombre}
                             </p>
                             <p className='flex justify-end ml-4'>
-                                ${producto.precio}
+                                Precio unitario ${producto.precio}
                             </p>
                             <div 
                                 className='ml-4'

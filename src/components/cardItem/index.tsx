@@ -2,13 +2,14 @@ import React from 'react'
 import Link from 'next/link'
 import { ProductoItemProps } from '../listItem/interfaceListItem'
 import Agregar from '../buttons/add'
+import Editar from '../buttons/edit'
 
 const Tarjeta = ({ producto }: ProductoItemProps) => {
   console.log('mensaje de card',producto)
   return (
     <>
       <div 
-        className="p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
+        className="p-6 max-w-lg bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700"
       >
         <h5 
           className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
@@ -21,7 +22,13 @@ const Tarjeta = ({ producto }: ProductoItemProps) => {
           {producto.descripcion}
         </p>
         <p
-          className='text-lg flex justify-end'
+          className='text-sm flex justify-end'
+        >
+          Piezas disponibles {producto.existencia}
+        </p>
+
+        <p
+          className='text-xl flex justify-end'
         >
           ${producto.precio}
         </p>
@@ -36,12 +43,20 @@ const Tarjeta = ({ producto }: ProductoItemProps) => {
                 Detalles producto
             </Link>
           </div>
-          <div>
+          <div >
             <Agregar>
               Agregar al carrito
             </Agregar>
           </div>
-
+          <div >
+            <Link
+              href={'/producto/editar/'+producto.slug}
+            >
+                <Editar>
+                  Editar datos
+                </Editar>
+            </Link>
+          </div>
         </div>
       </div>
     </>
