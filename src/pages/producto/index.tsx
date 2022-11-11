@@ -8,7 +8,6 @@ import { trpc } from '../../utils/trpc'
 
 const ListaProductos = () => {
   const productos = trpc.producto.dataProductos.useQuery();
-  console.log('<===>',productos.data?.productos)
   return (
     <>
       <div

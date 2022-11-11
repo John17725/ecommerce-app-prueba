@@ -1,6 +1,8 @@
 import { z } from "zod";
-
+import { Prisma } from "@prisma/client";
 import { router, publicProcedure } from "../trpc";
+
+
 
 export const productoRouter = router({
   dataProductos: publicProcedure
@@ -10,5 +12,17 @@ export const productoRouter = router({
         return {
             productos: productos
         }
+    }),
+  bySlugProduct: publicProcedure
+    .input(z.object({
+        slug: z.string(),
+      }),)
+    .query(async ({ ctx, input }) => {
+        const { slug } = input;
+        const producto = await ctx.prisma?.producto.findFirst({
+            where: { slug }
+        });
+
+        return producto
     })
 });
