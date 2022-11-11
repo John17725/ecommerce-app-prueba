@@ -1,9 +1,18 @@
+import Link from "next/link"
+import Remover from "../../components/buttons/remove"
 
 const NuevoProducto = () => {
     return (
         <>
-            <div className="w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <div className="mb-2 text-gray-700 text-m font-bold mb-2">
+            <div className="mt-6 mb-4 ml-4 w-full bg-white shadow-md rounded px-8 pt-6 pb-8">
+                <Link
+                    href={'/producto'}
+                >
+                    <Remover>
+                        Volver
+                    </Remover>
+                </Link>
+                <div className="mb-2 text-gray-700 text-m font-bold">
                     <p>Nuevo Producto</p>
                 </div>
                 <form className="grid grid-cols-2 gap-4 ">

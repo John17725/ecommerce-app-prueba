@@ -1,31 +1,22 @@
 import React from 'react'
 import { ProductoListProps } from "./interfaceListItem";
-import CardItem from "../cardItem"
+import Tarjeta from "../cardItem"
 
 const ListaElementos = ({ productos }: ProductoListProps) => {
-    console.log('lista',productos)
-    if(!productos?.length){
-        return(
-            <>
-            sss
-                {/* <CardItem
-                    mensaje={'Hola mundo'}
-                /> */}
-            </>
-        )
-    }
     return(
         <>
+            
             {
-                productos.map((producto) => {
+                productos.map((producto) => 
                    <div
+                    className='flex justify-center mt-3 mb-3'
                     key={producto.id}
                    >
-                    <CardItem
+                    <Tarjeta
                         producto={producto}
                     />
                    </div>
-                })
+                )
             }
         </>
     )
