@@ -16,7 +16,7 @@ export const productoRouter = router({
   bySlugProduct: publicProcedure
     .input(z.object({
         slug: z.string(),
-      }),)
+      }))
     .query(async ({ ctx, input }) => {
         const { slug } = input;
         const producto = await ctx.prisma?.producto.findFirst({
@@ -24,5 +24,46 @@ export const productoRouter = router({
         });
 
         return producto
-    })
+    }),
+  updateProduct: publicProcedure
+    .input(z.object({
+        id: z.number(),
+        nombre: z.string(),
+        descripcion: z.string(),
+        existencia: z.number()
+    }))
+    .mutation(async({ input}) =>{
+        const updateProd = await prisma?.producto.update({
+            where: {
+                id: input.id
+            },
+            data: {
+                nombre: input.nombre,
+                descripcion: input.descripcion,
+                existencia: input.existencia,
+                precio: input.precio,
+            }
+        })
+        return updateProd;
+    }),
+  createProdut: publicProcedure
+    .input(z.object({
+        nombre: z.string(),
+        descripcion: z.string(),
+        slug: z.string(),
+        existencia: z.number(),
+        precio: z.number()
+    }))
+    .mutation(async({ input })=>{
+        const create = await prisma?.producto.create({
+            data: {
+                nombre: input.nombre,
+                slug: input.slug,
+                descripcion: input.descripcion,
+                existencia: input.existencia,
+                precio: input.precio,
+            }
+        })
+        return create
+    }),
 });
