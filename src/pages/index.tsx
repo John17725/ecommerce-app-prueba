@@ -4,7 +4,7 @@ import Link from "next/link";
 import Crear from "../components/buttons/create"
 
 const Home: NextPage = () => {
-
+  
   return (
     <>
       <Head>

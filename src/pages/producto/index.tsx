@@ -4,7 +4,11 @@ import Crear from '../../components/buttons/create'
 import Link from 'next/link'
 import Remover from '../../components/buttons/remove'
 
+import { trpc } from '../../utils/trpc'
+
 const ListaProductos = () => {
+  const productos = trpc.producto.dataProductos.useQuery();
+  // console.log('<===>',productos)
   return (
     <>
       <div
