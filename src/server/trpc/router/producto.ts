@@ -67,4 +67,18 @@ export const productoRouter = router({
         })
         return create
     }),
+  deleteProd: publicProcedure
+    .input(z.object({
+        id: z.number()
+    }))
+    .mutation(async({ input }) => {
+        const deleteProducto = await prisma?.producto.delete({
+            where: {
+                id: input.id
+            }
+        })
+
+        return deleteProducto
+    })
+    
 });

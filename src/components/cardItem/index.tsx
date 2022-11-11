@@ -1,11 +1,22 @@
 import React from 'react'
 import Link from 'next/link'
 import { ProductoItemProps } from '../listItem/interfaceListItem'
+import { inferProcedureInput } from '@trpc/server'
+import type { AppRouter } from '../../server/trpc/router/_app' 
 import Agregar from '../buttons/add'
 import Editar from '../buttons/edit'
+import Remover from '../buttons/remove'
+
+import { trpc } from '../../utils/trpc'
 
 const Tarjeta = ({ producto }: ProductoItemProps) => {
-  console.log('mensaje de card',producto)
+  const utils = trpc.useContext();
+  const deleteProducto = trpc.producto.deleteProd.useMutation({
+    async onSuccess() {
+      // refetches posts after a post is added
+      await utils.producto.dataProductos.invalidate();
+    },
+});
   return (
     <>
       <div 
@@ -56,6 +67,20 @@ const Tarjeta = ({ producto }: ProductoItemProps) => {
                   Editar datos
                 </Editar>
             </Link>
+          </div>
+          <div
+            onClick={async()=>{
+              console.log('deleteoo', typeof producto.id)
+              try {
+                await deleteProducto.mutateAsync({id: producto.id});
+              } catch (cause) {
+                console.error({ cause }, 'Failed to add post');
+              }
+            }}
+          >
+            <Remover>
+              Borrar
+            </Remover>
           </div>
         </div>
       </div>
