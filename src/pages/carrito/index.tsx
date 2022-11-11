@@ -7,6 +7,7 @@ import { trpc } from '../../utils/trpc'
 
 const index = () => {
     const productos = trpc.carrito.dataProductosCarrito.useQuery();
+    console.log(productos)
     return (
         <>
             <div
@@ -39,10 +40,10 @@ const index = () => {
                                         Cantidad: {producto.cantidad}
                                     </p>
                                     <p className='flex justify-end ml-4'>
-                                        {/* {producto.nombre} */}
+                                        Producto a comprar {producto.productoId}
                                     </p>
                                     <p className='flex justify-end ml-4'>
-                                        {/* Precio unitario ${producto.precio} */}
+                                        Precio unitario ${producto.precioUnitario}
                                     </p>
                                     <div 
                                         className='ml-4'
