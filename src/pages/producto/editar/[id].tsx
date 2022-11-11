@@ -1,5 +1,7 @@
 import Link from "next/link"
 import { useState } from "react"
+import { inferProcedureInput } from "@trpc/server"
+import type { AppRouter } from "../../../server/trpc/router/_app"
 import Remover from "../../../components/buttons/remove"
 import { useRouter } from "next/router"
 import { Prisma } from "@prisma/client"
@@ -7,28 +9,17 @@ import { Prisma } from "@prisma/client"
 import { trpc  } from '../../../utils/trpc'
 
 const EditarProducto = () => {
+    const nav = useRouter();
     const slug = useRouter().query.id as string;
     const producto = trpc.producto.bySlugProduct.useQuery({slug: slug})
-    const [nombreProd, setNombreProd] = useState(producto.data?.nombre?producto.data?.nombre:"")
-    const [descripcionProd, setDescripcionProd] = useState(producto.data?.descripcion?producto.data?.descripcion:"")
-    const [existenciaProd, setExistenciaProd] = useState(producto.data?.existencia?producto.data?.existencia:"")
-    const [precioProd, setPrecioProd] = useState(producto.data?.precio?producto.data?.precio:"")
-    const handleUpdateProd = (event: any) =>{
-        event.preventDefault();
-        // if(producto.data?.id){
-            const updateProd = trpc.producto.updateProduct.useQuery(
-                {
-                    id: producto.data?.id,
-                    nombre: nombreProd,
-                    descripcion: descripcionProd,
-                    existencia: existenciaProd,
-                    precio: new Prisma.Decimal(precioProd)
-                }
-            )
-            console.log('Casdasd',updateProd)
-        // }
-        
-    } 
+    const utils = trpc.useContext();
+    const updateProd = trpc.producto.updateProduct.useMutation({
+        async onSuccess() {
+          // refetches posts after a post is added
+          nav.push('/producto');
+          await utils.producto.dataProductos.invalidate();
+        },
+    });
     if(producto.data?.id){
         return (
             <>
@@ -37,16 +28,34 @@ const EditarProducto = () => {
                         href={'/producto'}
                     >
                         <Remover>
-                            Cancelar
+                            Volver
                         </Remover>
                     </Link>
                     <div className="mb-2 text-gray-700 text-m font-bold">
-                        <p>Editar Producto 'prod'</p>
+                        <p>Editar Producto</p>
                     </div>
-                    <form 
-                        className="grid grid-cols-2 gap-4 "
-                        onSubmit={()=>handleUpdateProd}
-                    >
+                    <form className="grid grid-cols-2 gap-4 " onSubmit={async(e) =>{
+                        e.preventDefault();
+                        const $form = e.currentTarget;
+                        const values = Object.fromEntries(new FormData($form));
+                        // console.log('values',values)
+                        type Input = inferProcedureInput<AppRouter['producto']['updateProduct']>;
+                        //    ^?
+                        const input: Input = {
+                            id: Number(producto.data?.id),
+                            nombre: values.nombre as string,
+                            descripcion: values.descripcion as string,
+                            existencia: Number(values.existencia),
+                            precio: Number(values.precio),
+                        };
+                        try {
+                            await updateProd.mutateAsync(input);
+                            // console.log(input)
+                            $form.reset();
+                        } catch (cause) {
+                            console.error({ cause }, 'Failed to add prod');
+                        }
+                    }}>
                         <div className="mb-4">
                             <label 
                                 className="
@@ -67,9 +76,9 @@ const EditarProducto = () => {
                                     leading-tight 
                                     focus:outline-none 
                                     focus:shadow-outline" 
-                                id="username"
-                                defaultValue={nombreProd} 
-                                onChange={(event: any) => setNombreProd(event.target.value)}
+                                id="nombre"
+                                defaultValue={producto.data?.nombre}
+                                name="nombre" 
                                 type="text" 
                                 placeholder="Cheetos"
                             />
@@ -88,11 +97,11 @@ const EditarProducto = () => {
                                     leading-tight 
                                     focus:outline-none 
                                     focus:shadow-outline" 
-                                id="Descripcion" 
-                                defaultValue={descripcionProd}
-                                onChange={(event) => setDescripcionProd(event.target.value)}
+                                id="descripcion" 
+                                name="descripcion" 
+                                defaultValue={producto.data?.descripcion}
                                 type="text" 
-                                placeholder="Descripcion"
+                                placeholder="descripcion"
                             />
                         </div>
                         <div className="mb-4">
@@ -109,11 +118,10 @@ const EditarProducto = () => {
                                 leading-tight 
                                 focus:outline-none 
                                 focus:shadow-outline" 
-                            id="Existencias" 
-                            defaultValue={existenciaProd}
-                            onChange={(event) => setExistenciaProd(event.target.value)}
+                            id="existencia" 
+                            defaultValue={producto.data?.existencia}
+                            name="existencia" 
                             type="number" 
-                            placeholder="Existencias"
                         />
                         </div>
                         <div className="mb-4">
@@ -136,11 +144,10 @@ const EditarProducto = () => {
                                 leading-tight 
                                 focus:outline-none 
                                 focus:shadow-outline" 
-                            id="username" 
+                            id="precio" 
                             type="number"
-                            defaultValue={precioProd}
-                            onChange={(event) => setPrecioProd(event.target.value)}
-                            placeholder="Username"
+                            defaultValue={Number(producto.data?.precio)}
+                            name="precio" 
                         />
                         </div>
                         <div className="flex items-center justify-between">
@@ -155,7 +162,7 @@ const EditarProducto = () => {
                                     focus:shadow-outline" 
                                 type="submit"
                             >
-                                Actualizar
+                                Crear
                             </button>
                         </div>
                     </form>

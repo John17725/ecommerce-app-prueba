@@ -30,7 +30,8 @@ export const productoRouter = router({
         id: z.number(),
         nombre: z.string(),
         descripcion: z.string(),
-        existencia: z.number()
+        existencia: z.number(),
+        precio: z.number()
     }))
     .mutation(async({ input}) =>{
         const updateProd = await prisma?.producto.update({

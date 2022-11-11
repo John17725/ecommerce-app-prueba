@@ -5,9 +5,6 @@ import type { AppRouter } from "../../server/trpc/router/_app"
 import { trpc } from "../../utils/trpc"
 
 const NuevoProducto = () => {
-    const  randomNumberInRange = (min: number, max: number) => {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
     const utils = trpc.useContext();
     const addProd = trpc.producto.createProdut.useMutation({
         async onSuccess() {
