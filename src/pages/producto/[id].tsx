@@ -2,12 +2,22 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Editar from '../../components/buttons/edit'
+import Remover from '../../components/buttons/remove'
 
 import { trpc } from '../../utils/trpc'
 
 const Productos = () => {
+  const navigate = useRouter();
   const slug = useRouter().query.id as string;
   const producto = trpc.producto.bySlugProduct.useQuery({slug: slug})
+  const utils = trpc.useContext();
+  const deleteProducto = trpc.producto.deleteProd.useMutation({
+    async onSuccess() {
+      // refetches posts after a post is added
+      navigate.push('/producto')
+      await utils.producto.dataProductos.invalidate();
+    },
+  });
   if(producto.data?.nombre){
     return (
       <>
@@ -41,6 +51,20 @@ const Productos = () => {
                     Editar Producto
                   </Editar>
                 </Link>
+              </div>
+              <div
+                onClick={async()=>{
+                  console.log('deleteoo', typeof producto.data?.id)
+                  try {
+                    await deleteProducto.mutateAsync({id: Number(producto.data?.id)});
+                  } catch (cause) {
+                    console.error({ cause }, 'Failed to add post');
+                  }
+                }}
+              >
+                <Remover>
+                  Borrar
+                </Remover>
               </div>    
             </div>
           </div>

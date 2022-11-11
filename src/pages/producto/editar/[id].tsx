@@ -162,7 +162,7 @@ const EditarProducto = () => {
                                     focus:shadow-outline" 
                                 type="submit"
                             >
-                                Crear
+                                Actualizar
                             </button>
                         </div>
                     </form>

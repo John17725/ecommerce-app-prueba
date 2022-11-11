@@ -3,33 +3,10 @@ import Remover from '../../components/buttons/remove'
 import Link from 'next/link'
 import Agregar from '../../components/buttons/add'
 
+import { trpc } from '../../utils/trpc'
+
 const index = () => {
-    const productos = [
-        {
-            id: 1,
-            nombre: 'alcatel',
-            cantidad: 4,
-            precio: .13,
-        },
-        {
-            id: 2,
-            nombre: 'nokia',
-            cantidad: 4,
-            precio: .90,
-        },
-        {
-            id: 3,
-            nombre: 'samsung',
-            cantidad: 4,
-            precio: .56,
-        },
-        {
-            id: 4,
-            nombre: 'xiaomi',
-            cantidad: 4,
-            precio: .50,
-        },
-    ]
+    const productos = trpc.carrito.dataProductosCarrito.useQuery();
     return (
         <>
             <div
@@ -47,35 +24,44 @@ const index = () => {
                 >
                     <h2>Productos en carrito</h2>
                 </div>
-
-                <div>
-                    {productos.map((producto) => 
-                        <div
-                            key={producto.id}
-                            className='max-md flex mt-3 mb-3'
-                        >
-                            <p className='flex justify-end ml-4'>
-                                {producto.id}
-                            </p>
-                            <p className='flex justify-end ml-4'>
-                                Cantidad: {producto.cantidad}
-                            </p>
-                            <p className='flex justify-end ml-4'>
-                                {producto.nombre}
-                            </p>
-                            <p className='flex justify-end ml-4'>
-                                Precio unitario ${producto.precio}
-                            </p>
-                            <div 
-                                className='ml-4'
-                            >
-                                <Remover>
-                                    Quitar
-                                </Remover>
-                            </div>
+                {
+                    productos.data?.productos?(
+                        <div>
+                            {productos.data?.productos.map((producto) => 
+                                <div
+                                key={producto.id}
+                                className='max-md flex mt-3 mb-3'
+                                >
+                                    <p className='flex justify-end ml-4'>
+                                        {producto.id}
+                                    </p>
+                                    <p className='flex justify-end ml-4'>
+                                        Cantidad: {producto.cantidad}
+                                    </p>
+                                    <p className='flex justify-end ml-4'>
+                                        {/* {producto.nombre} */}
+                                    </p>
+                                    <p className='flex justify-end ml-4'>
+                                        {/* Precio unitario ${producto.precio} */}
+                                    </p>
+                                    <div 
+                                        className='ml-4'
+                                    >
+                                        <Remover>
+                                            Quitar
+                                        </Remover>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
+
+                    ):
+                    (
+                        <>
+                            <p>Cargando...</p>
+                        </>
+                    )
+                }
                 <div
                     className='flex justify-end'
                 >

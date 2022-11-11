@@ -3,12 +3,15 @@ import Remover from "../../components/buttons/remove"
 import { inferProcedureInput } from "@trpc/server"
 import type { AppRouter } from "../../server/trpc/router/_app"
 import { trpc } from "../../utils/trpc"
+import { useRouter } from "next/router"
 
 const NuevoProducto = () => {
+    const nav = useRouter();
     const utils = trpc.useContext();
     const addProd = trpc.producto.createProdut.useMutation({
         async onSuccess() {
           // refetches posts after a post is added
+          nav.push('/producto')
           await utils.producto.dataProductos.invalidate();
         },
       });

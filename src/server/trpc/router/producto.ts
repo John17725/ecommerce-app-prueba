@@ -79,6 +79,23 @@ export const productoRouter = router({
         })
 
         return deleteProducto
+    }),
+  reducirStock: publicProcedure
+    .input(z.object({
+        id: z.number(),
+        stock: z.number(),
+    }))
+    .mutation(async({ input }) => {
+        const downProd = await prisma?.producto.update({
+            where: {
+                id: input.id
+            },
+            data: {
+                existencia: input.stock-1
+            }
+        })
+
+        return downProd
     })
     
 });

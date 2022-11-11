@@ -11,12 +11,25 @@ import { trpc } from '../../utils/trpc'
 
 const Tarjeta = ({ producto }: ProductoItemProps) => {
   const utils = trpc.useContext();
+  // const productoInCarrito = trpc.carrito.byIdProduct.useQuery({productoId: producto.id})
   const deleteProducto = trpc.producto.deleteProd.useMutation({
     async onSuccess() {
       // refetches posts after a post is added
       await utils.producto.dataProductos.invalidate();
     },
-});
+  });
+  const downStockProducto = trpc.producto.reducirStock.useMutation({
+    async onSuccess() {
+      // refetches posts after a post is added
+      await utils.producto.dataProductos.invalidate();
+    },
+  });
+  const addProductoCarrito = trpc.carrito.addProduct.useMutation({
+    async onSuccess() {
+      // refetches posts after a post is added
+      await utils.producto.dataProductos.invalidate();
+    },
+  });
   return (
     <>
       <div 
@@ -54,11 +67,24 @@ const Tarjeta = ({ producto }: ProductoItemProps) => {
                 Detalles producto
             </Link>
           </div>
-          <div >
-            <Agregar>
-              Agregar al carrito
-            </Agregar>
-          </div>
+          {producto.existencia>0&&(
+            <div 
+              onClick={async()=>{
+                try {
+                  console.log('Carritoooo===>')
+                  if(producto.existencia>0){
+                    await downStockProducto.mutateAsync({id: producto.id,stock: producto.existencia});
+                  }
+                } catch (cause) {
+                  console.error({ cause }, 'Failed to add post');
+                }
+              }}
+            >
+              <Agregar>
+                Agregar al carrito
+              </Agregar>
+            </div>
+          )}
           <div >
             <Link
               href={'/producto/editar/'+producto.slug}

@@ -22,9 +22,11 @@ model Producto {
 }
 
 model Carrito {
-  id          Int       @id @default(autoincrement())
-  cantidad    Int
-  precioTotal Int
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              Int       @id @default(autoincrement())
+  productoId      Int       @unique
+  cantidad        Int
+  precioUnitario  Int
+  precioTotal     Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }

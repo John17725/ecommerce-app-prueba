@@ -3,7 +3,7 @@ export const products = [{
   slug: "jtjbc1ba6a2300723-product",
   descripcion: "Excision of Left Hand Muscle, Percutaneous Approach",
   existencia: 4,
-  precio: 14
+  precio: 0
 }, {
   nombre: "Porsche",
   slug: "jm1cw2clxf0408401-product",

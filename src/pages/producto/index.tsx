@@ -23,7 +23,7 @@ const ListaProductos = () => {
               href={'/carrito'}
             >
               <Remover>
-                Ver carrito '{'counter products'}'
+                Ver carrito
               </Remover>
             </Link>
           </div>
